@@ -1,13 +1,14 @@
 import ApolloClient from 'apollo-boost';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import ReactDOM from 'react-dom';
+import ProjectsPage from './ProjectsPage';
 
 const client = new ApolloClient({ uri: 'http://localhost:4000' });
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <h1>Weir</h1>
+    <ProjectsPage />
   </ApolloProvider>,
   document.getElementById('root'),
 );
