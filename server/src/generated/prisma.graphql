@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/public-fluffjaguar-915/weir/dev
-# timestamp: Fri Aug 10 2018 23:16:30 GMT-0400 (EDT)
+# timestamp: Sat Aug 11 2018 09:51:06 GMT-0400 (EDT)
 
 type AggregateBoard {
   count: Int!
@@ -1518,6 +1518,7 @@ enum Priority {
 
 type Project implements Node {
   boards(where: BoardWhereInput, orderBy: BoardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Board!]
+  collaborators(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   createdAt: DateTime!
   id: ID!
   issues(where: IssueWhereInput, orderBy: IssueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Issue!]
@@ -1540,7 +1541,13 @@ input ProjectCreateInput {
   key: String!
   name: String!
   boards: BoardCreateManyWithoutProjectInput
+  collaborators: UserCreateManyWithoutProjectsInput
   issues: IssueCreateManyWithoutProjectInput
+}
+
+input ProjectCreateManyWithoutCollaboratorsInput {
+  create: [ProjectCreateWithoutCollaboratorsInput!]
+  connect: [ProjectWhereUniqueInput!]
 }
 
 input ProjectCreateOneWithoutBoardsInput {
@@ -1556,6 +1563,14 @@ input ProjectCreateOneWithoutIssuesInput {
 input ProjectCreateWithoutBoardsInput {
   key: String!
   name: String!
+  collaborators: UserCreateManyWithoutProjectsInput
+  issues: IssueCreateManyWithoutProjectInput
+}
+
+input ProjectCreateWithoutCollaboratorsInput {
+  key: String!
+  name: String!
+  boards: BoardCreateManyWithoutProjectInput
   issues: IssueCreateManyWithoutProjectInput
 }
 
@@ -1563,6 +1578,7 @@ input ProjectCreateWithoutIssuesInput {
   key: String!
   name: String!
   boards: BoardCreateManyWithoutProjectInput
+  collaborators: UserCreateManyWithoutProjectsInput
 }
 
 """An edge in a connection."""
@@ -1638,7 +1654,17 @@ input ProjectUpdateInput {
   key: String
   name: String
   boards: BoardUpdateManyWithoutProjectInput
+  collaborators: UserUpdateManyWithoutProjectsInput
   issues: IssueUpdateManyWithoutProjectInput
+}
+
+input ProjectUpdateManyWithoutCollaboratorsInput {
+  create: [ProjectCreateWithoutCollaboratorsInput!]
+  connect: [ProjectWhereUniqueInput!]
+  disconnect: [ProjectWhereUniqueInput!]
+  delete: [ProjectWhereUniqueInput!]
+  update: [ProjectUpdateWithWhereUniqueWithoutCollaboratorsInput!]
+  upsert: [ProjectUpsertWithWhereUniqueWithoutCollaboratorsInput!]
 }
 
 input ProjectUpdateOneWithoutBoardsInput {
@@ -1660,6 +1686,14 @@ input ProjectUpdateOneWithoutIssuesInput {
 input ProjectUpdateWithoutBoardsDataInput {
   key: String
   name: String
+  collaborators: UserUpdateManyWithoutProjectsInput
+  issues: IssueUpdateManyWithoutProjectInput
+}
+
+input ProjectUpdateWithoutCollaboratorsDataInput {
+  key: String
+  name: String
+  boards: BoardUpdateManyWithoutProjectInput
   issues: IssueUpdateManyWithoutProjectInput
 }
 
@@ -1667,6 +1701,12 @@ input ProjectUpdateWithoutIssuesDataInput {
   key: String
   name: String
   boards: BoardUpdateManyWithoutProjectInput
+  collaborators: UserUpdateManyWithoutProjectsInput
+}
+
+input ProjectUpdateWithWhereUniqueWithoutCollaboratorsInput {
+  where: ProjectWhereUniqueInput!
+  data: ProjectUpdateWithoutCollaboratorsDataInput!
 }
 
 input ProjectUpsertWithoutBoardsInput {
@@ -1677,6 +1717,12 @@ input ProjectUpsertWithoutBoardsInput {
 input ProjectUpsertWithoutIssuesInput {
   update: ProjectUpdateWithoutIssuesDataInput!
   create: ProjectCreateWithoutIssuesInput!
+}
+
+input ProjectUpsertWithWhereUniqueWithoutCollaboratorsInput {
+  where: ProjectWhereUniqueInput!
+  update: ProjectUpdateWithoutCollaboratorsDataInput!
+  create: ProjectCreateWithoutCollaboratorsInput!
 }
 
 input ProjectWhereInput {
@@ -1855,6 +1901,9 @@ input ProjectWhereInput {
   boards_every: BoardWhereInput
   boards_some: BoardWhereInput
   boards_none: BoardWhereInput
+  collaborators_every: UserWhereInput
+  collaborators_some: UserWhereInput
+  collaborators_none: UserWhereInput
   issues_every: IssueWhereInput
   issues_some: IssueWhereInput
   issues_none: IssueWhereInput
@@ -1907,6 +1956,7 @@ type User implements Node {
   id: ID!
   cards(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Card!]
   name: String!
+  projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project!]
   updatedAt: DateTime!
   username: String!
 }
@@ -1926,6 +1976,12 @@ input UserCreateInput {
   name: String!
   username: String!
   cards: CardCreateManyWithoutAssigneeInput
+  projects: ProjectCreateManyWithoutCollaboratorsInput
+}
+
+input UserCreateManyWithoutProjectsInput {
+  create: [UserCreateWithoutProjectsInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateOneWithoutCardsInput {
@@ -1937,6 +1993,14 @@ input UserCreateWithoutCardsInput {
   avatarUrl: String!
   name: String!
   username: String!
+  projects: ProjectCreateManyWithoutCollaboratorsInput
+}
+
+input UserCreateWithoutProjectsInput {
+  avatarUrl: String!
+  name: String!
+  username: String!
+  cards: CardCreateManyWithoutAssigneeInput
 }
 
 """An edge in a connection."""
@@ -2016,6 +2080,16 @@ input UserUpdateInput {
   name: String
   username: String
   cards: CardUpdateManyWithoutAssigneeInput
+  projects: ProjectUpdateManyWithoutCollaboratorsInput
+}
+
+input UserUpdateManyWithoutProjectsInput {
+  create: [UserCreateWithoutProjectsInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutProjectsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutProjectsInput!]
 }
 
 input UserUpdateOneWithoutCardsInput {
@@ -2031,11 +2105,30 @@ input UserUpdateWithoutCardsDataInput {
   avatarUrl: String
   name: String
   username: String
+  projects: ProjectUpdateManyWithoutCollaboratorsInput
+}
+
+input UserUpdateWithoutProjectsDataInput {
+  avatarUrl: String
+  name: String
+  username: String
+  cards: CardUpdateManyWithoutAssigneeInput
+}
+
+input UserUpdateWithWhereUniqueWithoutProjectsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutProjectsDataInput!
 }
 
 input UserUpsertWithoutCardsInput {
   update: UserUpdateWithoutCardsDataInput!
   create: UserCreateWithoutCardsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutProjectsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutProjectsDataInput!
+  create: UserCreateWithoutProjectsInput!
 }
 
 input UserWhereInput {
@@ -2254,6 +2347,9 @@ input UserWhereInput {
   cards_every: CardWhereInput
   cards_some: CardWhereInput
   cards_none: CardWhereInput
+  projects_every: ProjectWhereInput
+  projects_some: ProjectWhereInput
+  projects_none: ProjectWhereInput
 }
 
 input UserWhereUniqueInput {
