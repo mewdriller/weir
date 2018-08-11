@@ -1,0 +1,85 @@
+enum Estimate {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+}
+
+enum IssueType {
+  BUG
+  EPIC
+  STORY
+  TASK
+}
+
+enum Priority {
+  BLOCKER
+  CRITICAL
+  MAJOR
+  MINOR
+  TRIVIAL
+}
+
+type User {
+  avatarUrl: String!
+  createdAt: DateTime!
+  id: ID! @unique
+  cards: [Card!]!
+  name: String!
+  updatedAt: DateTime!
+  username: String! @unique
+}
+
+type Project {
+  boards: [Board!]!
+  createdAt: DateTime!
+  id: ID! @unique
+  issues: [Issue!]!
+  key: String! @unique
+  name: String!
+  updatedAt: DateTime!
+}
+
+type Board {
+  columns: [Column!]!
+  createdAt: DateTime!
+  id: ID! @unique
+  name: String!
+  project: Project!
+  updatedAt: DateTime!
+}
+
+type Column {
+  board: Board!
+  cards: [Card!]!
+  createdAt: DateTime!
+  id: ID! @unique
+  name: String!
+  order: Int!
+  updatedAt: DateTime!
+}
+
+type Card {
+  assignee: User
+  createdAt: DateTime!
+  id: ID! @unique
+  column: Column
+  issue: Issue!
+  order: Int!
+  updatedAt: DateTime!
+}
+
+type Issue {
+  cards: [Card!]!
+  createdAt: DateTime!
+  estimate: Estimate
+  id: ID! @unique
+  key: String! @unique
+  priority: Priority!
+  project: Project!
+  title: String!
+  type: IssueType!
+  updatedAt: DateTime!
+}

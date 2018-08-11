@@ -1,0 +1,5 @@
+datamodel: datamodel.graphql
+endpoint: https://us1.prisma.sh/public-fluffjaguar-915/weir/dev
+hooks:
+  post-deploy:
+    - graphql get-schema --project database
