@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/public-fluffjaguar-915/weir/dev
-# timestamp: Sat Aug 11 2018 09:51:06 GMT-0400 (EDT)
+# timestamp: Sat Aug 11 2018 10:32:54 GMT-0400 (EDT)
 
 type AggregateBoard {
   count: Int!
@@ -1023,6 +1023,7 @@ type Issue implements Node {
   key: String!
   priority: Priority!
   project(where: ProjectWhereInput): Project!
+  status: IssueStatus!
   title: String!
   type: IssueType!
   updatedAt: DateTime!
@@ -1042,6 +1043,7 @@ input IssueCreateInput {
   estimate: Estimate
   key: String!
   priority: Priority!
+  status: IssueStatus
   title: String!
   type: IssueType!
   cards: CardCreateManyWithoutIssueInput
@@ -1062,6 +1064,7 @@ input IssueCreateWithoutCardsInput {
   estimate: Estimate
   key: String!
   priority: Priority!
+  status: IssueStatus
   title: String!
   type: IssueType!
   project: ProjectCreateOneWithoutIssuesInput!
@@ -1071,6 +1074,7 @@ input IssueCreateWithoutProjectInput {
   estimate: Estimate
   key: String!
   priority: Priority!
+  status: IssueStatus
   title: String!
   type: IssueType!
   cards: CardCreateManyWithoutIssueInput
@@ -1096,6 +1100,8 @@ enum IssueOrderByInput {
   key_DESC
   priority_ASC
   priority_DESC
+  status_ASC
+  status_DESC
   title_ASC
   title_DESC
   type_ASC
@@ -1110,9 +1116,15 @@ type IssuePreviousValues {
   id: ID!
   key: String!
   priority: Priority!
+  status: IssueStatus!
   title: String!
   type: IssueType!
   updatedAt: DateTime!
+}
+
+enum IssueStatus {
+  CLOSED
+  OPEN
 }
 
 type IssueSubscriptionPayload {
@@ -1165,6 +1177,7 @@ input IssueUpdateInput {
   estimate: Estimate
   key: String
   priority: Priority
+  status: IssueStatus
   title: String
   type: IssueType
   cards: CardUpdateManyWithoutIssueInput
@@ -1192,6 +1205,7 @@ input IssueUpdateWithoutCardsDataInput {
   estimate: Estimate
   key: String
   priority: Priority
+  status: IssueStatus
   title: String
   type: IssueType
   project: ProjectUpdateOneWithoutIssuesInput
@@ -1201,6 +1215,7 @@ input IssueUpdateWithoutProjectDataInput {
   estimate: Estimate
   key: String
   priority: Priority
+  status: IssueStatus
   title: String
   type: IssueType
   cards: CardUpdateManyWithoutIssueInput
@@ -1353,6 +1368,16 @@ input IssueWhereInput {
 
   """All values that are not contained in given list."""
   priority_not_in: [Priority!]
+  status: IssueStatus
+
+  """All values that are not equal to given value."""
+  status_not: IssueStatus
+
+  """All values that are contained in given list."""
+  status_in: [IssueStatus!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [IssueStatus!]
   title: String
 
   """All values that are not equal to given value."""

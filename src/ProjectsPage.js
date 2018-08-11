@@ -1,3 +1,4 @@
+import { Link } from '@reach/router';
 import { gql } from 'apollo-boost';
 import React from 'react';
 import { Query } from 'react-apollo';
@@ -21,8 +22,7 @@ function ProjectsPage() {
   return (
     <Query query={QUERY}>
       {({ data, error, loading }) => {
-        if (error) return <p>Error</p>;
-        if (loading) return <p>Loading...</p>;
+        if (error || loading) return null;
 
         return (
           <React.Fragment>
@@ -30,15 +30,17 @@ function ProjectsPage() {
             <ul>
               {data.projects.map(project => (
                 <li key={project.key}>
-                  <h2>
-                    {project.name} ({project.key})
-                  </h2>
-                  <dl>
-                    <dt>Collaborators</dt>
-                    <dd>{project.collaborators.length}</dd>
-                    <dt>Issues</dt>
-                    <dd>{project.issues.length}</dd>
-                  </dl>
+                  <Link to={`/projects/${project.key}`}>
+                    <h2>
+                      {project.name} ({project.key})
+                    </h2>
+                    <dl>
+                      <dt>Collaborators</dt>
+                      <dd>{project.collaborators.length}</dd>
+                      <dt>Issues</dt>
+                      <dd>{project.issues.length}</dd>
+                    </dl>
+                  </Link>
                 </li>
               ))}
             </ul>

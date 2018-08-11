@@ -8,6 +8,10 @@ const resolvers = {
     },
   },
   Query: {
+    project(parent, { key }, ctx, info) {
+      return ctx.db.query.project({ where: { key } }, info);
+    },
+
     projects(parent, args, ctx, info) {
       return ctx.db.query.projects(null, info);
     },
