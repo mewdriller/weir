@@ -1,10 +1,15 @@
-# import Project from "./generated/prisma.graphql"
+# import Organization, Project from "./generated/prisma.graphql"
 
 type Query {
-  project(key: String!): Project
+  organizations: [Organization!]!
+  project(handle: String!): Project
   projects: [Project!]!
 }
 
 type Mutation {
-  createProject(key: String!, name: String!): Project
+  createProject(
+    handle: String!
+    name: String!
+    organizationId: String!
+  ): Project
 }

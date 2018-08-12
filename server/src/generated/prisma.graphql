@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/public-fluffjaguar-915/weir/dev
-# timestamp: Sat Aug 11 2018 10:32:54 GMT-0400 (EDT)
+# timestamp: Sun Aug 12 2018 11:36:42 GMT-0400 (Eastern Daylight Time)
 
 type AggregateBoard {
   count: Int!
@@ -14,6 +14,10 @@ type AggregateColumn {
 }
 
 type AggregateIssue {
+  count: Int!
+}
+
+type AggregateOrganization {
   count: Int!
 }
 
@@ -1019,8 +1023,8 @@ type Issue implements Node {
   cards(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Card!]
   createdAt: DateTime!
   estimate: Estimate
+  handle: String!
   id: ID!
-  key: String!
   priority: Priority!
   project(where: ProjectWhereInput): Project!
   status: IssueStatus!
@@ -1041,7 +1045,7 @@ type IssueConnection {
 
 input IssueCreateInput {
   estimate: Estimate
-  key: String!
+  handle: String!
   priority: Priority!
   status: IssueStatus
   title: String!
@@ -1062,7 +1066,7 @@ input IssueCreateOneWithoutCardsInput {
 
 input IssueCreateWithoutCardsInput {
   estimate: Estimate
-  key: String!
+  handle: String!
   priority: Priority!
   status: IssueStatus
   title: String!
@@ -1072,7 +1076,7 @@ input IssueCreateWithoutCardsInput {
 
 input IssueCreateWithoutProjectInput {
   estimate: Estimate
-  key: String!
+  handle: String!
   priority: Priority!
   status: IssueStatus
   title: String!
@@ -1094,10 +1098,10 @@ enum IssueOrderByInput {
   createdAt_DESC
   estimate_ASC
   estimate_DESC
+  handle_ASC
+  handle_DESC
   id_ASC
   id_DESC
-  key_ASC
-  key_DESC
   priority_ASC
   priority_DESC
   status_ASC
@@ -1113,8 +1117,8 @@ enum IssueOrderByInput {
 type IssuePreviousValues {
   createdAt: DateTime!
   estimate: Estimate
+  handle: String!
   id: ID!
-  key: String!
   priority: Priority!
   status: IssueStatus!
   title: String!
@@ -1175,7 +1179,7 @@ enum IssueType {
 
 input IssueUpdateInput {
   estimate: Estimate
-  key: String
+  handle: String
   priority: Priority
   status: IssueStatus
   title: String
@@ -1203,7 +1207,7 @@ input IssueUpdateOneWithoutCardsInput {
 
 input IssueUpdateWithoutCardsDataInput {
   estimate: Estimate
-  key: String
+  handle: String
   priority: Priority
   status: IssueStatus
   title: String
@@ -1213,7 +1217,7 @@ input IssueUpdateWithoutCardsDataInput {
 
 input IssueUpdateWithoutProjectDataInput {
   estimate: Estimate
-  key: String
+  handle: String
   priority: Priority
   status: IssueStatus
   title: String
@@ -1278,6 +1282,46 @@ input IssueWhereInput {
 
   """All values that are not contained in given list."""
   estimate_not_in: [Estimate!]
+  handle: String
+
+  """All values that are not equal to given value."""
+  handle_not: String
+
+  """All values that are contained in given list."""
+  handle_in: [String!]
+
+  """All values that are not contained in given list."""
+  handle_not_in: [String!]
+
+  """All values less than the given value."""
+  handle_lt: String
+
+  """All values less than or equal the given value."""
+  handle_lte: String
+
+  """All values greater than the given value."""
+  handle_gt: String
+
+  """All values greater than or equal the given value."""
+  handle_gte: String
+
+  """All values containing the given string."""
+  handle_contains: String
+
+  """All values not containing the given string."""
+  handle_not_contains: String
+
+  """All values starting with the given string."""
+  handle_starts_with: String
+
+  """All values not starting with the given string."""
+  handle_not_starts_with: String
+
+  """All values ending with the given string."""
+  handle_ends_with: String
+
+  """All values not ending with the given string."""
+  handle_not_ends_with: String
   id: ID
 
   """All values that are not equal to given value."""
@@ -1318,46 +1362,6 @@ input IssueWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  key: String
-
-  """All values that are not equal to given value."""
-  key_not: String
-
-  """All values that are contained in given list."""
-  key_in: [String!]
-
-  """All values that are not contained in given list."""
-  key_not_in: [String!]
-
-  """All values less than the given value."""
-  key_lt: String
-
-  """All values less than or equal the given value."""
-  key_lte: String
-
-  """All values greater than the given value."""
-  key_gt: String
-
-  """All values greater than or equal the given value."""
-  key_gte: String
-
-  """All values containing the given string."""
-  key_contains: String
-
-  """All values not containing the given string."""
-  key_not_contains: String
-
-  """All values starting with the given string."""
-  key_starts_with: String
-
-  """All values not starting with the given string."""
-  key_not_starts_with: String
-
-  """All values ending with the given string."""
-  key_ends_with: String
-
-  """All values not ending with the given string."""
-  key_not_ends_with: String
   priority: Priority
 
   """All values that are not equal to given value."""
@@ -1457,8 +1461,8 @@ input IssueWhereInput {
 }
 
 input IssueWhereUniqueInput {
+  handle: String
   id: ID
-  key: String
 }
 
 """
@@ -1469,36 +1473,42 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
+  createOrganization(data: OrganizationCreateInput!): Organization!
   createProject(data: ProjectCreateInput!): Project!
   createBoard(data: BoardCreateInput!): Board!
   createColumn(data: ColumnCreateInput!): Column!
   createCard(data: CardCreateInput!): Card!
   createIssue(data: IssueCreateInput!): Issue!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateOrganization(data: OrganizationUpdateInput!, where: OrganizationWhereUniqueInput!): Organization
   updateProject(data: ProjectUpdateInput!, where: ProjectWhereUniqueInput!): Project
   updateBoard(data: BoardUpdateInput!, where: BoardWhereUniqueInput!): Board
   updateColumn(data: ColumnUpdateInput!, where: ColumnWhereUniqueInput!): Column
   updateCard(data: CardUpdateInput!, where: CardWhereUniqueInput!): Card
   updateIssue(data: IssueUpdateInput!, where: IssueWhereUniqueInput!): Issue
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteOrganization(where: OrganizationWhereUniqueInput!): Organization
   deleteProject(where: ProjectWhereUniqueInput!): Project
   deleteBoard(where: BoardWhereUniqueInput!): Board
   deleteColumn(where: ColumnWhereUniqueInput!): Column
   deleteCard(where: CardWhereUniqueInput!): Card
   deleteIssue(where: IssueWhereUniqueInput!): Issue
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertOrganization(where: OrganizationWhereUniqueInput!, create: OrganizationCreateInput!, update: OrganizationUpdateInput!): Organization!
   upsertProject(where: ProjectWhereUniqueInput!, create: ProjectCreateInput!, update: ProjectUpdateInput!): Project!
   upsertBoard(where: BoardWhereUniqueInput!, create: BoardCreateInput!, update: BoardUpdateInput!): Board!
   upsertColumn(where: ColumnWhereUniqueInput!, create: ColumnCreateInput!, update: ColumnUpdateInput!): Column!
   upsertCard(where: CardWhereUniqueInput!, create: CardCreateInput!, update: CardUpdateInput!): Card!
   upsertIssue(where: IssueWhereUniqueInput!, create: IssueCreateInput!, update: IssueUpdateInput!): Issue!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyOrganizations(data: OrganizationUpdateInput!, where: OrganizationWhereInput): BatchPayload!
   updateManyProjects(data: ProjectUpdateInput!, where: ProjectWhereInput): BatchPayload!
   updateManyBoards(data: BoardUpdateInput!, where: BoardWhereInput): BatchPayload!
   updateManyColumns(data: ColumnUpdateInput!, where: ColumnWhereInput): BatchPayload!
   updateManyCards(data: CardUpdateInput!, where: CardWhereInput): BatchPayload!
   updateManyIssues(data: IssueUpdateInput!, where: IssueWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyOrganizations(where: OrganizationWhereInput): BatchPayload!
   deleteManyProjects(where: ProjectWhereInput): BatchPayload!
   deleteManyBoards(where: BoardWhereInput): BatchPayload!
   deleteManyColumns(where: ColumnWhereInput): BatchPayload!
@@ -1516,6 +1526,317 @@ enum MutationType {
 interface Node {
   """The id of the object."""
   id: ID!
+}
+
+type Organization implements Node {
+  createdAt: DateTime!
+  handle: String!
+  id: ID!
+  name: String!
+  projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project!]
+  updatedAt: DateTime!
+}
+
+"""A connection to a list of items."""
+type OrganizationConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [OrganizationEdge]!
+  aggregate: AggregateOrganization!
+}
+
+input OrganizationCreateInput {
+  handle: String!
+  name: String!
+  projects: ProjectCreateManyWithoutOrganizationInput
+}
+
+input OrganizationCreateOneWithoutProjectsInput {
+  create: OrganizationCreateWithoutProjectsInput
+  connect: OrganizationWhereUniqueInput
+}
+
+input OrganizationCreateWithoutProjectsInput {
+  handle: String!
+  name: String!
+}
+
+"""An edge in a connection."""
+type OrganizationEdge {
+  """The item at the end of the edge."""
+  node: Organization!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum OrganizationOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  handle_ASC
+  handle_DESC
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type OrganizationPreviousValues {
+  createdAt: DateTime!
+  handle: String!
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+}
+
+type OrganizationSubscriptionPayload {
+  mutation: MutationType!
+  node: Organization
+  updatedFields: [String!]
+  previousValues: OrganizationPreviousValues
+}
+
+input OrganizationSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [OrganizationSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [OrganizationSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [OrganizationSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: OrganizationWhereInput
+}
+
+input OrganizationUpdateInput {
+  handle: String
+  name: String
+  projects: ProjectUpdateManyWithoutOrganizationInput
+}
+
+input OrganizationUpdateOneWithoutProjectsInput {
+  create: OrganizationCreateWithoutProjectsInput
+  connect: OrganizationWhereUniqueInput
+  delete: Boolean
+  update: OrganizationUpdateWithoutProjectsDataInput
+  upsert: OrganizationUpsertWithoutProjectsInput
+}
+
+input OrganizationUpdateWithoutProjectsDataInput {
+  handle: String
+  name: String
+}
+
+input OrganizationUpsertWithoutProjectsInput {
+  update: OrganizationUpdateWithoutProjectsDataInput!
+  create: OrganizationCreateWithoutProjectsInput!
+}
+
+input OrganizationWhereInput {
+  """Logical AND on all given filters."""
+  AND: [OrganizationWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [OrganizationWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [OrganizationWhereInput!]
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  handle: String
+
+  """All values that are not equal to given value."""
+  handle_not: String
+
+  """All values that are contained in given list."""
+  handle_in: [String!]
+
+  """All values that are not contained in given list."""
+  handle_not_in: [String!]
+
+  """All values less than the given value."""
+  handle_lt: String
+
+  """All values less than or equal the given value."""
+  handle_lte: String
+
+  """All values greater than the given value."""
+  handle_gt: String
+
+  """All values greater than or equal the given value."""
+  handle_gte: String
+
+  """All values containing the given string."""
+  handle_contains: String
+
+  """All values not containing the given string."""
+  handle_not_contains: String
+
+  """All values starting with the given string."""
+  handle_starts_with: String
+
+  """All values not starting with the given string."""
+  handle_not_starts_with: String
+
+  """All values ending with the given string."""
+  handle_ends_with: String
+
+  """All values not ending with the given string."""
+  handle_not_ends_with: String
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  projects_every: ProjectWhereInput
+  projects_some: ProjectWhereInput
+  projects_none: ProjectWhereInput
+}
+
+input OrganizationWhereUniqueInput {
+  handle: String
+  id: ID
 }
 
 """Information about pagination in a connection."""
@@ -1545,10 +1866,11 @@ type Project implements Node {
   boards(where: BoardWhereInput, orderBy: BoardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Board!]
   collaborators(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   createdAt: DateTime!
+  handle: String!
   id: ID!
   issues(where: IssueWhereInput, orderBy: IssueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Issue!]
-  key: String!
   name: String!
+  organization(where: OrganizationWhereInput): Organization!
   updatedAt: DateTime!
 }
 
@@ -1563,15 +1885,21 @@ type ProjectConnection {
 }
 
 input ProjectCreateInput {
-  key: String!
+  handle: String!
   name: String!
   boards: BoardCreateManyWithoutProjectInput
   collaborators: UserCreateManyWithoutProjectsInput
   issues: IssueCreateManyWithoutProjectInput
+  organization: OrganizationCreateOneWithoutProjectsInput!
 }
 
 input ProjectCreateManyWithoutCollaboratorsInput {
   create: [ProjectCreateWithoutCollaboratorsInput!]
+  connect: [ProjectWhereUniqueInput!]
+}
+
+input ProjectCreateManyWithoutOrganizationInput {
+  create: [ProjectCreateWithoutOrganizationInput!]
   connect: [ProjectWhereUniqueInput!]
 }
 
@@ -1586,24 +1914,35 @@ input ProjectCreateOneWithoutIssuesInput {
 }
 
 input ProjectCreateWithoutBoardsInput {
-  key: String!
+  handle: String!
   name: String!
   collaborators: UserCreateManyWithoutProjectsInput
   issues: IssueCreateManyWithoutProjectInput
+  organization: OrganizationCreateOneWithoutProjectsInput!
 }
 
 input ProjectCreateWithoutCollaboratorsInput {
-  key: String!
+  handle: String!
   name: String!
   boards: BoardCreateManyWithoutProjectInput
   issues: IssueCreateManyWithoutProjectInput
+  organization: OrganizationCreateOneWithoutProjectsInput!
 }
 
 input ProjectCreateWithoutIssuesInput {
-  key: String!
+  handle: String!
   name: String!
   boards: BoardCreateManyWithoutProjectInput
   collaborators: UserCreateManyWithoutProjectsInput
+  organization: OrganizationCreateOneWithoutProjectsInput!
+}
+
+input ProjectCreateWithoutOrganizationInput {
+  handle: String!
+  name: String!
+  boards: BoardCreateManyWithoutProjectInput
+  collaborators: UserCreateManyWithoutProjectsInput
+  issues: IssueCreateManyWithoutProjectInput
 }
 
 """An edge in a connection."""
@@ -1618,10 +1957,10 @@ type ProjectEdge {
 enum ProjectOrderByInput {
   createdAt_ASC
   createdAt_DESC
+  handle_ASC
+  handle_DESC
   id_ASC
   id_DESC
-  key_ASC
-  key_DESC
   name_ASC
   name_DESC
   updatedAt_ASC
@@ -1630,8 +1969,8 @@ enum ProjectOrderByInput {
 
 type ProjectPreviousValues {
   createdAt: DateTime!
+  handle: String!
   id: ID!
-  key: String!
   name: String!
   updatedAt: DateTime!
 }
@@ -1676,11 +2015,12 @@ input ProjectSubscriptionWhereInput {
 }
 
 input ProjectUpdateInput {
-  key: String
+  handle: String
   name: String
   boards: BoardUpdateManyWithoutProjectInput
   collaborators: UserUpdateManyWithoutProjectsInput
   issues: IssueUpdateManyWithoutProjectInput
+  organization: OrganizationUpdateOneWithoutProjectsInput
 }
 
 input ProjectUpdateManyWithoutCollaboratorsInput {
@@ -1690,6 +2030,15 @@ input ProjectUpdateManyWithoutCollaboratorsInput {
   delete: [ProjectWhereUniqueInput!]
   update: [ProjectUpdateWithWhereUniqueWithoutCollaboratorsInput!]
   upsert: [ProjectUpsertWithWhereUniqueWithoutCollaboratorsInput!]
+}
+
+input ProjectUpdateManyWithoutOrganizationInput {
+  create: [ProjectCreateWithoutOrganizationInput!]
+  connect: [ProjectWhereUniqueInput!]
+  disconnect: [ProjectWhereUniqueInput!]
+  delete: [ProjectWhereUniqueInput!]
+  update: [ProjectUpdateWithWhereUniqueWithoutOrganizationInput!]
+  upsert: [ProjectUpsertWithWhereUniqueWithoutOrganizationInput!]
 }
 
 input ProjectUpdateOneWithoutBoardsInput {
@@ -1709,29 +2058,45 @@ input ProjectUpdateOneWithoutIssuesInput {
 }
 
 input ProjectUpdateWithoutBoardsDataInput {
-  key: String
+  handle: String
   name: String
   collaborators: UserUpdateManyWithoutProjectsInput
   issues: IssueUpdateManyWithoutProjectInput
+  organization: OrganizationUpdateOneWithoutProjectsInput
 }
 
 input ProjectUpdateWithoutCollaboratorsDataInput {
-  key: String
+  handle: String
   name: String
   boards: BoardUpdateManyWithoutProjectInput
   issues: IssueUpdateManyWithoutProjectInput
+  organization: OrganizationUpdateOneWithoutProjectsInput
 }
 
 input ProjectUpdateWithoutIssuesDataInput {
-  key: String
+  handle: String
   name: String
   boards: BoardUpdateManyWithoutProjectInput
   collaborators: UserUpdateManyWithoutProjectsInput
+  organization: OrganizationUpdateOneWithoutProjectsInput
+}
+
+input ProjectUpdateWithoutOrganizationDataInput {
+  handle: String
+  name: String
+  boards: BoardUpdateManyWithoutProjectInput
+  collaborators: UserUpdateManyWithoutProjectsInput
+  issues: IssueUpdateManyWithoutProjectInput
 }
 
 input ProjectUpdateWithWhereUniqueWithoutCollaboratorsInput {
   where: ProjectWhereUniqueInput!
   data: ProjectUpdateWithoutCollaboratorsDataInput!
+}
+
+input ProjectUpdateWithWhereUniqueWithoutOrganizationInput {
+  where: ProjectWhereUniqueInput!
+  data: ProjectUpdateWithoutOrganizationDataInput!
 }
 
 input ProjectUpsertWithoutBoardsInput {
@@ -1748,6 +2113,12 @@ input ProjectUpsertWithWhereUniqueWithoutCollaboratorsInput {
   where: ProjectWhereUniqueInput!
   update: ProjectUpdateWithoutCollaboratorsDataInput!
   create: ProjectCreateWithoutCollaboratorsInput!
+}
+
+input ProjectUpsertWithWhereUniqueWithoutOrganizationInput {
+  where: ProjectWhereUniqueInput!
+  update: ProjectUpdateWithoutOrganizationDataInput!
+  create: ProjectCreateWithoutOrganizationInput!
 }
 
 input ProjectWhereInput {
@@ -1781,6 +2152,46 @@ input ProjectWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
+  handle: String
+
+  """All values that are not equal to given value."""
+  handle_not: String
+
+  """All values that are contained in given list."""
+  handle_in: [String!]
+
+  """All values that are not contained in given list."""
+  handle_not_in: [String!]
+
+  """All values less than the given value."""
+  handle_lt: String
+
+  """All values less than or equal the given value."""
+  handle_lte: String
+
+  """All values greater than the given value."""
+  handle_gt: String
+
+  """All values greater than or equal the given value."""
+  handle_gte: String
+
+  """All values containing the given string."""
+  handle_contains: String
+
+  """All values not containing the given string."""
+  handle_not_contains: String
+
+  """All values starting with the given string."""
+  handle_starts_with: String
+
+  """All values not starting with the given string."""
+  handle_not_starts_with: String
+
+  """All values ending with the given string."""
+  handle_ends_with: String
+
+  """All values not ending with the given string."""
+  handle_not_ends_with: String
   id: ID
 
   """All values that are not equal to given value."""
@@ -1821,46 +2232,6 @@ input ProjectWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  key: String
-
-  """All values that are not equal to given value."""
-  key_not: String
-
-  """All values that are contained in given list."""
-  key_in: [String!]
-
-  """All values that are not contained in given list."""
-  key_not_in: [String!]
-
-  """All values less than the given value."""
-  key_lt: String
-
-  """All values less than or equal the given value."""
-  key_lte: String
-
-  """All values greater than the given value."""
-  key_gt: String
-
-  """All values greater than or equal the given value."""
-  key_gte: String
-
-  """All values containing the given string."""
-  key_contains: String
-
-  """All values not containing the given string."""
-  key_not_contains: String
-
-  """All values starting with the given string."""
-  key_starts_with: String
-
-  """All values not starting with the given string."""
-  key_not_starts_with: String
-
-  """All values ending with the given string."""
-  key_ends_with: String
-
-  """All values not ending with the given string."""
-  key_not_ends_with: String
   name: String
 
   """All values that are not equal to given value."""
@@ -1932,27 +2303,31 @@ input ProjectWhereInput {
   issues_every: IssueWhereInput
   issues_some: IssueWhereInput
   issues_none: IssueWhereInput
+  organization: OrganizationWhereInput
 }
 
 input ProjectWhereUniqueInput {
+  handle: String
   id: ID
-  key: String
 }
 
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  organizations(where: OrganizationWhereInput, orderBy: OrganizationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Organization]!
   projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project]!
   boards(where: BoardWhereInput, orderBy: BoardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Board]!
   columns(where: ColumnWhereInput, orderBy: ColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Column]!
   cards(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Card]!
   issues(where: IssueWhereInput, orderBy: IssueOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Issue]!
   user(where: UserWhereUniqueInput!): User
+  organization(where: OrganizationWhereUniqueInput!): Organization
   project(where: ProjectWhereUniqueInput!): Project
   board(where: BoardWhereUniqueInput!): Board
   column(where: ColumnWhereUniqueInput!): Column
   card(where: CardWhereUniqueInput!): Card
   issue(where: IssueWhereUniqueInput!): Issue
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  organizationsConnection(where: OrganizationWhereInput, orderBy: OrganizationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OrganizationConnection!
   projectsConnection(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProjectConnection!
   boardsConnection(where: BoardWhereInput, orderBy: BoardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BoardConnection!
   columnsConnection(where: ColumnWhereInput, orderBy: ColumnOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ColumnConnection!
@@ -1968,6 +2343,7 @@ type Query {
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  organization(where: OrganizationSubscriptionWhereInput): OrganizationSubscriptionPayload
   project(where: ProjectSubscriptionWhereInput): ProjectSubscriptionPayload
   board(where: BoardSubscriptionWhereInput): BoardSubscriptionPayload
   column(where: ColumnSubscriptionWhereInput): ColumnSubscriptionPayload
@@ -1978,12 +2354,12 @@ type Subscription {
 type User implements Node {
   avatarUrl: String!
   createdAt: DateTime!
+  handle: String!
   id: ID!
   cards(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Card!]
   name: String!
   projects(where: ProjectWhereInput, orderBy: ProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Project!]
   updatedAt: DateTime!
-  username: String!
 }
 
 """A connection to a list of items."""
@@ -1998,8 +2374,8 @@ type UserConnection {
 
 input UserCreateInput {
   avatarUrl: String!
+  handle: String!
   name: String!
-  username: String!
   cards: CardCreateManyWithoutAssigneeInput
   projects: ProjectCreateManyWithoutCollaboratorsInput
 }
@@ -2016,15 +2392,15 @@ input UserCreateOneWithoutCardsInput {
 
 input UserCreateWithoutCardsInput {
   avatarUrl: String!
+  handle: String!
   name: String!
-  username: String!
   projects: ProjectCreateManyWithoutCollaboratorsInput
 }
 
 input UserCreateWithoutProjectsInput {
   avatarUrl: String!
+  handle: String!
   name: String!
-  username: String!
   cards: CardCreateManyWithoutAssigneeInput
 }
 
@@ -2042,23 +2418,23 @@ enum UserOrderByInput {
   avatarUrl_DESC
   createdAt_ASC
   createdAt_DESC
+  handle_ASC
+  handle_DESC
   id_ASC
   id_DESC
   name_ASC
   name_DESC
   updatedAt_ASC
   updatedAt_DESC
-  username_ASC
-  username_DESC
 }
 
 type UserPreviousValues {
   avatarUrl: String!
   createdAt: DateTime!
+  handle: String!
   id: ID!
   name: String!
   updatedAt: DateTime!
-  username: String!
 }
 
 type UserSubscriptionPayload {
@@ -2102,8 +2478,8 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   avatarUrl: String
+  handle: String
   name: String
-  username: String
   cards: CardUpdateManyWithoutAssigneeInput
   projects: ProjectUpdateManyWithoutCollaboratorsInput
 }
@@ -2128,15 +2504,15 @@ input UserUpdateOneWithoutCardsInput {
 
 input UserUpdateWithoutCardsDataInput {
   avatarUrl: String
+  handle: String
   name: String
-  username: String
   projects: ProjectUpdateManyWithoutCollaboratorsInput
 }
 
 input UserUpdateWithoutProjectsDataInput {
   avatarUrl: String
+  handle: String
   name: String
-  username: String
   cards: CardUpdateManyWithoutAssigneeInput
 }
 
@@ -2227,6 +2603,46 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
+  handle: String
+
+  """All values that are not equal to given value."""
+  handle_not: String
+
+  """All values that are contained in given list."""
+  handle_in: [String!]
+
+  """All values that are not contained in given list."""
+  handle_not_in: [String!]
+
+  """All values less than the given value."""
+  handle_lt: String
+
+  """All values less than or equal the given value."""
+  handle_lte: String
+
+  """All values greater than the given value."""
+  handle_gt: String
+
+  """All values greater than or equal the given value."""
+  handle_gte: String
+
+  """All values containing the given string."""
+  handle_contains: String
+
+  """All values not containing the given string."""
+  handle_not_contains: String
+
+  """All values starting with the given string."""
+  handle_starts_with: String
+
+  """All values not starting with the given string."""
+  handle_not_starts_with: String
+
+  """All values ending with the given string."""
+  handle_ends_with: String
+
+  """All values not ending with the given string."""
+  handle_not_ends_with: String
   id: ID
 
   """All values that are not equal to given value."""
@@ -2329,46 +2745,6 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
-  username: String
-
-  """All values that are not equal to given value."""
-  username_not: String
-
-  """All values that are contained in given list."""
-  username_in: [String!]
-
-  """All values that are not contained in given list."""
-  username_not_in: [String!]
-
-  """All values less than the given value."""
-  username_lt: String
-
-  """All values less than or equal the given value."""
-  username_lte: String
-
-  """All values greater than the given value."""
-  username_gt: String
-
-  """All values greater than or equal the given value."""
-  username_gte: String
-
-  """All values containing the given string."""
-  username_contains: String
-
-  """All values not containing the given string."""
-  username_not_contains: String
-
-  """All values starting with the given string."""
-  username_starts_with: String
-
-  """All values not starting with the given string."""
-  username_not_starts_with: String
-
-  """All values ending with the given string."""
-  username_ends_with: String
-
-  """All values not ending with the given string."""
-  username_not_ends_with: String
   cards_every: CardWhereInput
   cards_some: CardWhereInput
   cards_none: CardWhereInput
@@ -2378,6 +2754,6 @@ input UserWhereInput {
 }
 
 input UserWhereUniqueInput {
+  handle: String
   id: ID
-  username: String
 }

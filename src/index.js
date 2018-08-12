@@ -5,8 +5,8 @@ import { ApolloProvider } from 'react-apollo';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import Layout from './Layout';
-import ProjectPage from './ProjectPage';
-import ProjectsIndexContainer from './ProjectsIndexContainer';
+import ProjectIndexContainer from './ProjectIndexContainer';
+import ProjectSummaryContainer from './ProjectSummaryContainer';
 
 const client = new ApolloClient({ uri: 'http://localhost:4000' });
 const rootEl = document.getElementById('root');
@@ -18,8 +18,8 @@ ReactDOM.render(
     <Router>
       <Redirect from="/" to="/projects" />
       <Layout path="/">
-        <ProjectsIndexContainer path="/projects" />
-        <ProjectPage path="/projects/:projectKey" />
+        <ProjectIndexContainer path="/projects" />
+        <ProjectSummaryContainer path="/projects/:handle" />
       </Layout>
     </Router>
   </ApolloProvider>,

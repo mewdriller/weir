@@ -3,13 +3,27 @@ const { Prisma } = require('prisma-binding');
 
 const resolvers = {
   Mutation: {
-    createProject(parent, { key, name }, ctx, info) {
-      return ctx.db.mutation.createProject({ data: { key, name } }, info);
+    createProject(parent, { handle, name, organizationId }, ctx, info) {
+      return ctx.db.mutation.createProject(
+        {
+          data: {
+            handle,
+            name,
+            organization: { connect: { id: organizationId } },
+          },
+        },
+        info,
+      );
     },
   },
+
   Query: {
-    project(parent, { key }, ctx, info) {
-      return ctx.db.query.project({ where: { key } }, info);
+    organizations(parent, args, ctx, info) {
+      return ctx.db.query.organizations(null, info);
+    },
+
+    project(parent, { handle }, ctx, info) {
+      return ctx.db.query.project({ where: { handle } }, info);
     },
 
     projects(parent, args, ctx, info) {

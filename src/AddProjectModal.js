@@ -3,24 +3,24 @@ import React from 'react';
 import Modal from 'react-modal';
 
 class AddProjectModal extends React.Component {
-  state = { key: '', name: '' };
+  state = { handle: '', name: '', organizationId: '' };
 
   handleInputChange = mem(fieldName => event => {
     this.setState({ [fieldName]: event.target.value });
   });
 
   handleSubmit = () => {
-    const { key, name } = this.state;
+    const { handle, name, organizationId } = this.state;
 
-    this.props.onCreate({ key, name }).then(() => {
-      this.setState({ key: '', name: '' });
+    this.props.onCreate({ handle, name, organizationId }).then(() => {
+      this.setState({ handle: '', name: '', organizationId: '' });
       this.props.onClose();
     });
   };
 
   render() {
-    const { onClose, open } = this.props;
-    const { key, name } = this.state;
+    const { onClose, open, organizations } = this.props;
+    const { handle, name, organizationId } = this.state;
 
     return (
       <Modal isOpen={open}>
@@ -39,12 +39,26 @@ class AddProjectModal extends React.Component {
           />
         </label>
         <label>
-          Project key
+          Project handle
           <input
-            onChange={this.handleInputChange('key')}
+            onChange={this.handleInputChange('handle')}
             type="text"
-            value={key}
+            value={handle}
           />
+        </label>
+        <label>
+          Organization
+          <select
+            onChange={this.handleInputChange('organizationId')}
+            value={organizationId}
+          >
+            <option>Select an organization</option>
+            {organizations.map(({ id, name }) => (
+              <option key={id} value={id}>
+                {name}
+              </option>
+            ))}
+          </select>
         </label>
         <button onClick={this.handleSubmit}>Create project</button>
       </Modal>

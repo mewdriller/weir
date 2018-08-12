@@ -30,22 +30,32 @@ enum IssueStatus {
 type User {
   avatarUrl: String!
   createdAt: DateTime!
+  handle: String! @unique
   id: ID! @unique
   cards: [Card!]!
   name: String!
   projects: [Project!]!
   updatedAt: DateTime!
-  username: String! @unique
+}
+
+type Organization {
+  createdAt: DateTime!
+  handle: String! @unique
+  id: ID! @unique
+  name: String!
+  projects: [Project!]!
+  updatedAt: DateTime!
 }
 
 type Project {
   boards: [Board!]!
   collaborators: [User!]!
   createdAt: DateTime!
+  handle: String! @unique
   id: ID! @unique
   issues: [Issue!]!
-  key: String! @unique
   name: String!
+  organization: Organization!
   updatedAt: DateTime!
 }
 
@@ -82,8 +92,8 @@ type Issue {
   cards: [Card!]!
   createdAt: DateTime!
   estimate: Estimate
+  handle: String! @unique
   id: ID! @unique
-  key: String! @unique
   priority: Priority!
   project: Project!
   status: IssueStatus! @default(value: OPEN)

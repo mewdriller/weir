@@ -2,7 +2,7 @@ import { Link } from '@reach/router';
 import React from 'react';
 import AddProjectModal from './AddProjectModal';
 
-class ProjectsIndexPage extends React.Component {
+class ProjectIndexPage extends React.Component {
   state = {
     showModal: false,
   };
@@ -12,7 +12,7 @@ class ProjectsIndexPage extends React.Component {
   };
 
   render() {
-    const { projects, onCreateProject } = this.props;
+    const { organizations, projects, onCreateProject } = this.props;
     const { showModal } = this.state;
 
     return (
@@ -20,10 +20,10 @@ class ProjectsIndexPage extends React.Component {
         <h1>Projects</h1>
         <ul>
           {projects.map(project => (
-            <li key={project.key}>
-              <Link to={`/projects/${project.key}`}>
+            <li key={project.handle}>
+              <Link to={`/projects/${project.handle}`}>
                 <h2>
-                  {project.name} ({project.key})
+                  {project.name} ({project.handle})
                 </h2>
                 <dl>
                   <dt>Collaborators</dt>
@@ -45,10 +45,11 @@ class ProjectsIndexPage extends React.Component {
           onClose={this.handleToggleModal}
           onCreate={onCreateProject}
           open={showModal}
+          organizations={organizations}
         />
       </React.Fragment>
     );
   }
 }
 
-export default ProjectsIndexPage;
+export default ProjectIndexPage;
