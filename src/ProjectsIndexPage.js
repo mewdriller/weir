@@ -2,7 +2,7 @@ import { Link } from '@reach/router';
 import React from 'react';
 import AddProjectModal from './AddProjectModal';
 
-class ProjectIndexPage extends React.Component {
+class ProjectsIndexPage extends React.Component {
   state = {
     showModal: false,
   };
@@ -52,4 +52,4 @@ class ProjectIndexPage extends React.Component {
   }
 }
 
-export default ProjectIndexPage;
+export default ProjectsIndexPage;

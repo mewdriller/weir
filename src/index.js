@@ -4,9 +4,10 @@ import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
-import Layout from './Layout';
-import ProjectIndexContainer from './ProjectIndexContainer';
-import ProjectSummaryContainer from './ProjectSummaryContainer';
+import AppLayout from './AppLayout';
+import IssuesIndexContainer from './IssuesIndexContainer';
+import ProjectDashboardContainer from './ProjectDashboardContainer';
+import ProjectsIndexContainer from './ProjectsIndexContainer';
 
 const client = new ApolloClient({ uri: 'http://localhost:4000' });
 const rootEl = document.getElementById('root');
@@ -17,10 +18,11 @@ ReactDOM.render(
   <ApolloProvider client={client}>
     <Router>
       <Redirect from="/" to="/projects" />
-      <Layout path="/">
-        <ProjectIndexContainer path="/projects" />
-        <ProjectSummaryContainer path="/projects/:handle" />
-      </Layout>
+      <AppLayout path="/">
+        <IssuesIndexContainer path="issues" />
+        <ProjectsIndexContainer path="projects" />
+        <ProjectDashboardContainer path="projects/:handle" />
+      </AppLayout>
     </Router>
   </ApolloProvider>,
   rootEl,

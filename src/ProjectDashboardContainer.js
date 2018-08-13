@@ -1,11 +1,11 @@
 import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
 import { compose, mapProps, setDisplayName } from 'recompose';
-import ProjectSummaryPage from './ProjectSummaryPage';
+import ProjectDashboardPage from './ProjectDashboardPage';
 import waitForQueries from './waitForQueries';
 
-const ProjectSummaryQuery = gql`
-  query ProjectSummaryQuery($handle: String!) {
+const ProjectDashboardQuery = gql`
+  query ProjectDashboardQuery($handle: String!) {
     project(handle: $handle) {
       boards {
         id
@@ -30,14 +30,14 @@ const ProjectSummaryQuery = gql`
 `;
 
 export default compose(
-  graphql(ProjectSummaryQuery, {
-    name: 'projectSummaryQuery',
+  graphql(ProjectDashboardQuery, {
+    name: 'projectDashboardQuery',
     options: ({ handle }) => ({ variables: { handle } }),
   }),
-  waitForQueries('projectSummaryQuery'),
-  mapProps(({ projectSummaryQuery, ...rest }) => ({
+  waitForQueries('projectDashboardQuery'),
+  mapProps(({ projectDashboardQuery, ...rest }) => ({
     ...rest,
-    project: projectSummaryQuery.project,
+    project: projectDashboardQuery.project,
   })),
-  setDisplayName('ProjectSummaryContainer'),
-)(ProjectSummaryPage);
+  setDisplayName('ProjectDashboardContainer'),
+)(ProjectDashboardPage);

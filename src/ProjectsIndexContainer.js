@@ -1,11 +1,11 @@
 import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
 import { compose, mapProps, setDisplayName } from 'recompose';
-import ProjectIndexPage from './ProjectIndexPage';
+import ProjectsIndexPage from './ProjectsIndexPage';
 import waitForQueries from './waitForQueries';
 
-const ProjectIndexEntryFragment = gql`
-  fragment ProjectIndexEntry on Project {
+const ProjectsIndexEntryFragment = gql`
+  fragment ProjectsIndexEntry on Project {
     collaborators {
       handle
       id
@@ -25,23 +25,23 @@ const ProjectIndexEntryFragment = gql`
   }
 `;
 
-const ProjectIndexQuery = gql`
-  ${ProjectIndexEntryFragment}
+const ProjectsIndexQuery = gql`
+  ${ProjectsIndexEntryFragment}
 
-  query ProjectIndexQuery {
+  query ProjectsIndexQuery {
     organizations {
       handle
       id
       name
     }
     projects {
-      ...ProjectIndexEntry
+      ...ProjectsIndexEntry
     }
   }
 `;
 
 const CreateProjectMutation = gql`
-  ${ProjectIndexEntryFragment}
+  ${ProjectsIndexEntryFragment}
 
   mutation CreateProjectMutation(
     $handle: String!
@@ -53,21 +53,21 @@ const CreateProjectMutation = gql`
       name: $name
       organizationId: $organizationId
     ) {
-      ...ProjectIndexEntry
+      ...ProjectsIndexEntry
     }
   }
 `;
 
 export default compose(
-  graphql(ProjectIndexQuery, { name: 'projectIndexQuery' }),
+  graphql(ProjectsIndexQuery, { name: 'projectsIndexQuery' }),
   graphql(CreateProjectMutation, {
     name: 'onCreateProject',
     options: {
       update: (proxy, { data: { project } }) => {
-        const queryData = proxy.readQuery({ query: ProjectIndexQuery });
+        const queryData = proxy.readQuery({ query: ProjectsIndexQuery });
 
         proxy.writeQuery({
-          query: ProjectIndexQuery,
+          query: ProjectsIndexQuery,
           data: { ...queryData, projects: [...queryData.projects, project] },
         });
       },
@@ -76,11 +76,11 @@ export default compose(
       onCreateProject: variables => props.onCreateProject({ variables }),
     }),
   }),
-  waitForQueries('projectIndexQuery'),
-  mapProps(({ projectIndexQuery, ...rest }) => ({
+  waitForQueries('projectsIndexQuery'),
+  mapProps(({ projectsIndexQuery, ...rest }) => ({
     ...rest,
-    organizations: projectIndexQuery.organizations,
-    projects: projectIndexQuery.projects,
+    organizations: projectsIndexQuery.organizations,
+    projects: projectsIndexQuery.projects,
   })),
-  setDisplayName('ProjectIndexContainer'),
-)(ProjectIndexPage);
+  setDisplayName('ProjectsIndexContainer'),
+)(ProjectsIndexPage);

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ProjectSummaryPage({ project }) {
+function ProjectDashboardPage({ project }) {
   return (
     <React.Fragment>
       <h1>
@@ -31,4 +31,4 @@ function ProjectSummaryPage({ project }) {
   );
 }
 
-export default ProjectSummaryPage;
+export default ProjectDashboardPage;

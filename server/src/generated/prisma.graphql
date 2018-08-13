@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/public-fluffjaguar-915/weir/dev
-# timestamp: Sun Aug 12 2018 11:36:42 GMT-0400 (Eastern Daylight Time)
+# timestamp: Sun Aug 12 2018 20:18:00 GMT-0400 (Eastern Daylight Time)
 
 type AggregateBoard {
   count: Int!
@@ -1020,6 +1020,7 @@ enum Estimate {
 }
 
 type Issue implements Node {
+  body: String
   cards(where: CardWhereInput, orderBy: CardOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Card!]
   createdAt: DateTime!
   estimate: Estimate
@@ -1044,6 +1045,7 @@ type IssueConnection {
 }
 
 input IssueCreateInput {
+  body: String
   estimate: Estimate
   handle: String!
   priority: Priority!
@@ -1065,6 +1067,7 @@ input IssueCreateOneWithoutCardsInput {
 }
 
 input IssueCreateWithoutCardsInput {
+  body: String
   estimate: Estimate
   handle: String!
   priority: Priority!
@@ -1075,6 +1078,7 @@ input IssueCreateWithoutCardsInput {
 }
 
 input IssueCreateWithoutProjectInput {
+  body: String
   estimate: Estimate
   handle: String!
   priority: Priority!
@@ -1094,6 +1098,8 @@ type IssueEdge {
 }
 
 enum IssueOrderByInput {
+  body_ASC
+  body_DESC
   createdAt_ASC
   createdAt_DESC
   estimate_ASC
@@ -1115,6 +1121,7 @@ enum IssueOrderByInput {
 }
 
 type IssuePreviousValues {
+  body: String
   createdAt: DateTime!
   estimate: Estimate
   handle: String!
@@ -1178,6 +1185,7 @@ enum IssueType {
 }
 
 input IssueUpdateInput {
+  body: String
   estimate: Estimate
   handle: String
   priority: Priority
@@ -1206,6 +1214,7 @@ input IssueUpdateOneWithoutCardsInput {
 }
 
 input IssueUpdateWithoutCardsDataInput {
+  body: String
   estimate: Estimate
   handle: String
   priority: Priority
@@ -1216,6 +1225,7 @@ input IssueUpdateWithoutCardsDataInput {
 }
 
 input IssueUpdateWithoutProjectDataInput {
+  body: String
   estimate: Estimate
   handle: String
   priority: Priority
@@ -1250,6 +1260,46 @@ input IssueWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [IssueWhereInput!]
+  body: String
+
+  """All values that are not equal to given value."""
+  body_not: String
+
+  """All values that are contained in given list."""
+  body_in: [String!]
+
+  """All values that are not contained in given list."""
+  body_not_in: [String!]
+
+  """All values less than the given value."""
+  body_lt: String
+
+  """All values less than or equal the given value."""
+  body_lte: String
+
+  """All values greater than the given value."""
+  body_gt: String
+
+  """All values greater than or equal the given value."""
+  body_gte: String
+
+  """All values containing the given string."""
+  body_contains: String
+
+  """All values not containing the given string."""
+  body_not_contains: String
+
+  """All values starting with the given string."""
+  body_starts_with: String
+
+  """All values not starting with the given string."""
+  body_not_starts_with: String
+
+  """All values ending with the given string."""
+  body_ends_with: String
+
+  """All values not ending with the given string."""
+  body_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""

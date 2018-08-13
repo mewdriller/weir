@@ -89,6 +89,7 @@ type Card {
 }
 
 type Issue {
+  body: String
   cards: [Card!]!
   createdAt: DateTime!
   estimate: Estimate
