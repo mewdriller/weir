@@ -1,4 +1,5 @@
 import React from 'react';
+import { AddIcon, Button } from '../common';
 import AddIssueModal from './AddIssueModal';
 
 class IssuesIndexPage extends React.Component {
@@ -17,6 +18,9 @@ class IssuesIndexPage extends React.Component {
     return (
       <React.Fragment>
         <h1>Issues</h1>
+        <Button icon={AddIcon} onClick={this.handleToggleModal} outlined>
+          Add Issue
+        </Button>
         <ul>
           {issues.map(issue => (
             <li key={issue.handle}>
@@ -41,12 +45,6 @@ class IssuesIndexPage extends React.Component {
             </li>
           ))}
         </ul>
-        <button onClick={this.handleToggleModal}>
-          <span aria-label="Heavy Plus Sign" role="img">
-            ➕
-          </span>
-          Add Issue
-        </button>
         <AddIssueModal
           onClose={this.handleToggleModal}
           onCreate={onCreateIssue}

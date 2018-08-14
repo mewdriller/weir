@@ -1,8 +1,8 @@
 import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
 import { compose, mapProps, setDisplayName } from 'recompose';
+import { waitForQueries } from '../common';
 import ProjectDashboardPage from './ProjectDashboardPage';
-import waitForQueries from './waitForQueries';
 
 const ProjectDashboardQuery = gql`
   query ProjectDashboardQuery($handle: String!) {

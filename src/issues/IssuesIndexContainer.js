@@ -1,8 +1,8 @@
 import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
 import { compose, mapProps, setDisplayName } from 'recompose';
+import { waitForQueries } from '../common';
 import IssuesIndexPage from './IssuesIndexPage';
-import waitForQueries from './waitForQueries';
 
 const IssuesIndexEntryFragment = gql`
   fragment IssuesIndexEntry on Issue {

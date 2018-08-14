@@ -1,5 +1,6 @@
 import { Link } from '@reach/router';
 import React from 'react';
+import { AddIcon, Button } from '../common';
 import AddProjectModal from './AddProjectModal';
 
 class ProjectsIndexPage extends React.Component {
@@ -18,6 +19,9 @@ class ProjectsIndexPage extends React.Component {
     return (
       <React.Fragment>
         <h1>Projects</h1>
+        <Button icon={AddIcon} onClick={this.handleToggleModal} outlined>
+          ADD PROJECT
+        </Button>
         <ul>
           {projects.map(project => (
             <li key={project.handle}>
@@ -35,12 +39,6 @@ class ProjectsIndexPage extends React.Component {
             </li>
           ))}
         </ul>
-        <button onClick={this.handleToggleModal}>
-          <span aria-label="Heavy Plus Sign" role="img">
-            ➕
-          </span>
-          Add Project
-        </button>
         <AddProjectModal
           onClose={this.handleToggleModal}
           onCreate={onCreateProject}
