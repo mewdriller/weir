@@ -16,6 +16,13 @@ const IssueCountQuery = `
 
 const resolvers = {
   Mutation: {
+    createBoard(parent, { name, projectId }, ctx, info) {
+      return ctx.db.mutation.createBoard(
+        { data: { name, project: { connect: { id: projectId } } } },
+        info,
+      );
+    },
+
     createIssue(
       parent,
       { body, estimate, priority, projectId, title, type },

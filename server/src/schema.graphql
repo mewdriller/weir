@@ -2,12 +2,17 @@
 
 type Query {
   issues: [Issue!]!
+
   organizations: [Organization!]!
+
   project(handle: String!): Project
+
   projects: [Project!]!
 }
 
 type Mutation {
+  createBoard(name: String!, projectId: String!): Board
+
   createIssue(
     body: String
     estimate: Estimate
@@ -16,6 +21,7 @@ type Mutation {
     title: String!
     type: IssueType!
   ): Issue
+
   createProject(
     handle: String!
     name: String!

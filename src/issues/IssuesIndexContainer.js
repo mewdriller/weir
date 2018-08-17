@@ -1,4 +1,5 @@
 import { gql } from 'apollo-boost';
+import { concat, update } from 'lodash/fp';
 import { graphql } from 'react-apollo';
 import { compose, mapProps, setDisplayName } from 'recompose';
 import { waitForQueries } from '../common';
@@ -71,13 +72,13 @@ export default compose(
         const queryData = proxy.readQuery({ query: IssuesIndexQuery });
 
         proxy.writeQuery({
+          data: update('issues', concat(issue), queryData),
           query: IssuesIndexQuery,
-          data: { ...queryData, issues: [...queryData.issues, issue] },
         });
       },
     },
-    props: props => ({
-      onCreateIssue: variables => props.onCreateIssue({ variables }),
+    props: ({ onCreateIssue }) => ({
+      onCreateIssue: variables => onCreateIssue({ variables }),
     }),
   }),
   waitForQueries('issuesIndexQuery'),

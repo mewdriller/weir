@@ -1,4 +1,5 @@
 import { gql } from 'apollo-boost';
+import { concat, update } from 'lodash/fp';
 import { graphql } from 'react-apollo';
 import { compose, mapProps, setDisplayName } from 'recompose';
 import { waitForQueries } from '../common';
@@ -67,13 +68,13 @@ export default compose(
         const queryData = proxy.readQuery({ query: ProjectsIndexQuery });
 
         proxy.writeQuery({
+          data: update('projects', concat(project), queryData),
           query: ProjectsIndexQuery,
-          data: { ...queryData, projects: [...queryData.projects, project] },
         });
       },
     },
-    props: props => ({
-      onCreateProject: variables => props.onCreateProject({ variables }),
+    props: ({ onCreateProject }) => ({
+      onCreateProject: variables => onCreateProject({ variables }),
     }),
   }),
   waitForQueries('projectsIndexQuery'),
